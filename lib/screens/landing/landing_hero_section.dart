@@ -1,6 +1,6 @@
 import 'package:cpgrams_ui_kit/components/custom_button.dart';
-import 'package:flutter/material.dart';
 import 'package:cpgrams_ui_kit/components/images.dart';
+import 'package:flutter/material.dart';
 
 class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
@@ -17,7 +17,7 @@ class _HeroSectionState extends State<HeroSection> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: const Color(0x40554a4a40),
+            color: const Color(0xFF4a4a40),
             blurRadius: 50,
             spreadRadius: -12,
           ),
@@ -28,11 +28,7 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   Widget _backgroundImage() {
-    return Image.asset(
-      homepageBanner,
-      fit: BoxFit.cover,
-      height: 220,
-    );
+    return Image.asset(homepageBanner, fit: BoxFit.cover, height: 220);
   }
 
   Widget _compliantFormWithAI() {
@@ -87,7 +83,7 @@ class _HeroSectionState extends State<HeroSection> {
                 fontSize: 14,
                 letterSpacing: 0.25,
                 height: 2,
-                color: const Color(0xff21212180),
+                color: const Color(0xFF212180),
               ),
               textAlign: TextAlign.center,
             ),
@@ -236,7 +232,12 @@ class _HeroSectionState extends State<HeroSection> {
 }
 
 class GradientText extends StatelessWidget {
-  const GradientText(this.text, {super.key, required this.gradient, this.style});
+  const GradientText(
+    this.text, {
+    super.key,
+    required this.gradient,
+    this.style,
+  });
 
   final String text;
   final TextStyle? style;
