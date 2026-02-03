@@ -1,3 +1,4 @@
+import 'package:cpgrams_citizen_app/models/auth/otp_modal.dart';
 import 'package:cpgrams_citizen_app/services/auth_service.dart';
 import 'package:cpgrams_ui_kit/components/custom_otp.dart';
 import 'package:cpgrams_ui_kit/main.dart';
@@ -28,12 +29,37 @@ class _LoginOtpState extends State<LoginOtp> {
     });
   }
 
-  void _onOtpResend() {
-    // Handle OTP resend logic here
+  Future<void> _onOtpResend() async {
+    try {
+      final payload = MobileOtpPayload(
+        mobileNumber: _mobileNumber,
+        requestType: 'LOGIN',
+      );
+
+      final response = await AuthAPISerivce().resendOtp(payload);
+      if (!mounted) return;
+      if (response.success) {
+        setState(() {
+          _showError = false;
+          _errorMessage = '';
+        });
+      } else {
+        setState(() {
+          _errorMessage = response.message ?? 'Failed to resend OTP.';
+          _showError = true;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'An error occurred. Please try again.';
+        _showError = true;
+      });
+      debugPrint('OTP Resend Error: $e');
+    }
   }
 
   Future<void> _onOtpSubmit() async {
-    // Handle OTP submit logic here
     if (_otp.length < 6) {
       setState(() {
         _errorMessage = 'Please enter a valid 6-digit OTP.';
@@ -61,7 +87,6 @@ class _LoginOtpState extends State<LoginOtp> {
           _showError = false;
           _isLoading = false;
         });
-        // Navigate to the next screen or perform further actions
       } else {
         setState(() {
           _errorMessage = response.message ?? 'OTP verification failed.';

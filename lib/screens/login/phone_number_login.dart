@@ -20,6 +20,13 @@ class _PhoneNumberLoginState extends State<PhoneNumberLogin> {
   bool isLoading = false;
   late String _countryCode = '+91';
 
+  @override
+  void dispose() {
+    _mobileNumberController.dispose();
+    _mobileNumberFocusNode.dispose();
+    super.dispose();
+  }
+
   bool _disableOtpButton() {
     return _mobileNumberController.text.length < 2;
   }
