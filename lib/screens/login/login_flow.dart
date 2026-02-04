@@ -9,10 +9,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(child: LoginFlow()),
-    );
+    return SafeArea(child: LoginFlow());
   }
 }
 
@@ -155,7 +152,7 @@ class _LoginFlowState extends State<LoginFlow> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.pushNamed(context, '/register');
+                      Navigator.pushReplacementNamed(context, '/register');
                     },
                 ),
               ],

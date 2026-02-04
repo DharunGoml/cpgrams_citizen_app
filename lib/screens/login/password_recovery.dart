@@ -411,14 +411,11 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(18.0),
-          child: _getPasswordRecoveryBody(),
-        ),
+    return SafeArea(
+      maintainBottomViewPadding: true,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(18.0),
+        child: _getPasswordRecoveryBody(),
       ),
     );
   }

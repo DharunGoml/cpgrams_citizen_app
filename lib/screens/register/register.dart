@@ -9,10 +9,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(child: RegisterFlow()),
-    );
+    return SafeArea(child: RegisterFlow());
   }
 }
 
@@ -134,17 +131,17 @@ class _RegisterFlowState extends State<RegisterFlow> {
           const SizedBox(height: 24.0),
           RichText(
             text: TextSpan(
-              text: "Don't have an account?",
+              text: "Already have an account?",
               children: [
                 TextSpan(
-                  text: " Register Now",
+                  text: " Log In",
                   style: TextStyle(
                     color: const Color(0xFFFF7501),
                     fontWeight: FontWeight.w600,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.pushNamed(context, '/register');
+                      Navigator.pushReplacementNamed(context, '/login');
                     },
                 ),
               ],
