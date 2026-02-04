@@ -12,8 +12,11 @@ class HeroSection extends StatefulWidget {
 class _HeroSectionState extends State<HeroSection> {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      height: 900,
+      height: screenHeight * 0.85,
+      constraints: BoxConstraints(minHeight: 800, maxHeight: 980),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -28,19 +31,35 @@ class _HeroSectionState extends State<HeroSection> {
   }
 
   Widget _backgroundImage() {
-    return Image.asset(homepageBanner, fit: BoxFit.cover, height: 220);
+    return Image.asset(
+      homepageBanner,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: 220,
+    );
   }
 
   Widget _compliantFormWithAI() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth > 400 ? 358.0 : screenWidth * 0.9;
+    final leftPosition = (screenWidth - cardWidth) / 2;
+
     return Positioned(
       top: 88,
-      left: 35,
+      left: leftPosition,
       child: Container(
-        width: 358,
-        height: 812,
+        width: cardWidth,
+        constraints: BoxConstraints(maxWidth: 500),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
         ),
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -111,7 +130,7 @@ class _HeroSectionState extends State<HeroSection> {
             CustomButton(
               onPressed: () {},
               text: "Submit Grievance",
-              width: 318,
+              width: double.infinity,
               height: 48,
               borderRadius: 8.0,
               backgroundColor: Color(0xFF2E5090),
@@ -120,7 +139,7 @@ class _HeroSectionState extends State<HeroSection> {
             CustomButton(
               onPressed: () {},
               text: "Track Grievance",
-              width: 318,
+              width: double.infinity,
               height: 48,
               borderRadius: 8.0,
               borderColor: Color(0xFF2E5090),
@@ -136,13 +155,13 @@ class _HeroSectionState extends State<HeroSection> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 319,
-        height: 99,
+        width: double.infinity,
+        constraints: BoxConstraints(minHeight: 99),
+        padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
           color: Color(int.parse(color)),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,8 +192,8 @@ class _HeroSectionState extends State<HeroSection> {
 
   Widget _chatSection() {
     return Container(
-      width: 314,
-      height: 260,
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: 260, maxHeight: 300),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         gradient: const LinearGradient(

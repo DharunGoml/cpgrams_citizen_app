@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'landing_hero_section.dart';
 
-// import 'package:cpgrams_ui_kit/components/hero_section.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -16,7 +15,7 @@ class LandingScreen extends StatelessWidget {
         children: [
           HeroSection(),
           SizedBox(height: 41),
-          _raiseCompliant(),
+          _raiseCompliant(context),
           SizedBox(height: 16),
           _compliantsSection(),
           FooterSection(),
@@ -25,9 +24,12 @@ class LandingScreen extends StatelessWidget {
     );
   }
 
-  Widget _raiseCompliant() {
+  Widget _raiseCompliant(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final contentWidth = screenWidth > 400 ? 358.0 : screenWidth * 0.9;
+
     return SizedBox(
-      width: 358,
+      width: contentWidth,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -113,7 +115,6 @@ class LandingScreen extends StatelessWidget {
 
   Widget _compliantsSection() {
     return Container(
-      height: 352,
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       decoration: BoxDecoration(
@@ -148,54 +149,50 @@ class LandingScreen extends StatelessWidget {
   }
 
   Widget _sec(String image, String title, String subTitle) {
-    return SizedBox(
-      width: 230,
-      height: 50,
-      child: Row(
-        spacing: 20,
-        children: <Widget>[
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.white54,
-            child: Image.asset(image, width: 27, height: 27, fit: BoxFit.cover),
-          ),
-          Row(
-            spacing: 16,
-            children: [
-              const VerticalDivider(
-                width: 20,
-                thickness: 1,
-                indent: 1,
-                endIndent: 4,
-                color: Colors.white,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans',
-                    ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: Colors.white54,
+          child: Image.asset(image, width: 27, height: 27, fit: BoxFit.cover),
+        ),
+        SizedBox(width: 20),
+        Row(
+          children: [
+            const VerticalDivider(
+              width: 20,
+              thickness: 1,
+              indent: 1,
+              endIndent: 4,
+              color: Colors.white,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Noto Sans',
                   ),
-                  Text(
-                    subTitle,
-                    style: TextStyle(
-                      color: Colors.white54,
-                      fontSize: 14,
-                      fontFamily: 'Noto Sans',
-                    ),
+                ),
+                Text(
+                  subTitle,
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: 14,
+                    fontFamily: 'Noto Sans',
                   ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
