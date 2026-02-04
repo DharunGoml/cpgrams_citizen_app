@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'landing_hero_section.dart';
 
-
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
@@ -49,13 +48,17 @@ class LandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(whatsAppLogo, width: 26, height: 26),
-                  Text(
-                    'Raise Complaint on WhatsApp',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Noto Sans',
-                      color: Colors.black,
+                  Expanded(
+                    child: Text(
+                      'Raise Complaint on WhatsApp',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Noto Sans',
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],
@@ -82,27 +85,31 @@ class LandingScreen extends StatelessWidget {
                     size: 24,
                     color: Colors.black,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Help number',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Noto Sans',
-                          color: Colors.grey,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Help number',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Noto Sans',
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '1800-123-4545',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Noto Sans',
-                          color: Colors.black,
+                        Text(
+                          '1800-123-4545',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Noto Sans',
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

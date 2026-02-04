@@ -12,10 +12,8 @@ class HeroSection extends StatefulWidget {
 class _HeroSectionState extends State<HeroSection> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Container(
-      height: screenHeight * 0.85,
+      height: 980,
       constraints: BoxConstraints(minHeight: 800, maxHeight: 980),
       decoration: BoxDecoration(
         boxShadow: [
@@ -65,6 +63,7 @@ class _HeroSectionState extends State<HeroSection> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: [
             RichText(
               text: TextSpan(
@@ -140,6 +139,7 @@ class _HeroSectionState extends State<HeroSection> {
               onPressed: () {},
               text: "Track Grievance",
               width: double.infinity,
+              type: ButtonType.secondary,
               height: 48,
               borderRadius: 8.0,
               borderColor: Color(0xFF2E5090),

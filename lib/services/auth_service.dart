@@ -111,4 +111,52 @@ class AuthAPISerivce {
       return ApiResponse.failure(message: 'An unexpected error occurred');
     }
   }
-}
+
+
+  Future<ApiResponse<Map<String, dynamic>>> register({
+     required String firstName,
+     required String lastName,
+     required String password,
+     required String confirmPassword,
+     required List<Map<String, String>> identifiers,
+  }) async {
+    try {
+      final payload = {
+      "data": {
+        "firstName": firstName,
+        "lastName": lastName,
+        "password": password,
+        "confirmPassword": confirmPassword,
+        "identifiers": identifiers,
+      }
+      };
+
+      final response = await DioClient.dio.post(
+        "/users/api/v1/citizens/verify",
+        data: payload,
+        options: Options(
+          headers: ApiHeaders.build(sourceId: 'citizen.web', clientId: 'darpg'),
+        ),
+      );
+
+      return ApiResponse.success(
+        data: response.data,
+        message: 'Registration successful',
+      );
+
+    } on DioException catch (e) {
+      String errorMessage = 'An error occurred during registration';
+      if (e.response?.data?['errors'] != null) {
+        final errors = e.response!.data['errors'];
+        if (errors is List && errors.isNotEmpty) {
+          errorMessage = errors[0]['message'] ?? errorMessage;
+        }
+      } else if (e.message != null) {
+        errorMessage = e.message!;
+      }
+      return ApiResponse.failure(message: errorMessage);
+    }
+
+
+
+}}
