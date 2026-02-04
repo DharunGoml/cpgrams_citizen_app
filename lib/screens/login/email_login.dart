@@ -113,122 +113,119 @@ class _EmailLoginState extends State<EmailLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const Text(
-                "Please enter your Email Address",
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontFamily: "Noto Sans",
-                  fontWeight: FontWeight.w500,
-                ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            const Text(
+              "Please enter your Email Address",
+              style: TextStyle(
+                fontSize: 22.0,
+                fontFamily: "Noto Sans",
+                fontWeight: FontWeight.w500,
               ),
-              const SizedBox(height: 48.0),
-              CustomTextField(
-                hintText: "Enter your email ID here",
-                label: "Email Address",
-                showRequiredAsterisk: true,
-                controller: _emailController,
-                focusNode: _emailFocusNode,
-                keyboardType: TextInputType.emailAddress,
-                errorText: _emailError.isNotEmpty ? _emailError : null,
-                onChanged: (value) {
-                  setState(() {
-                    if (_emailError.isNotEmpty) {
-                      _emailError = '';
-                    }
-                  });
-                },
+            ),
+            const SizedBox(height: 48.0),
+            CustomTextField(
+              hintText: "Enter your email ID here",
+              label: "Email Address",
+              showRequiredAsterisk: true,
+              controller: _emailController,
+              focusNode: _emailFocusNode,
+              keyboardType: TextInputType.emailAddress,
+              errorText: _emailError.isNotEmpty ? _emailError : null,
+              onChanged: (value) {
+                setState(() {
+                  if (_emailError.isNotEmpty) {
+                    _emailError = '';
+                  }
+                });
+              },
+            ),
+            const SizedBox(height: 24.0),
+            CustomTextField(
+              hintText: "Enter your password",
+              label: "Password",
+              showRequiredAsterisk: true,
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+              isPassword: true,
+              errorText: _passwordError.isNotEmpty ? _passwordError : null,
+              onChanged: (value) {
+                setState(() {
+                  if (_passwordError.isNotEmpty) {
+                    _passwordError = '';
+                  }
+                });
+              },
+            ),
+            const SizedBox(height: 48),
+            CustomButton(
+              text: isLoading ? "Logging in..." : "Login",
+              onPressed: _onSubmitEmailLoginDetails,
+              type: ButtonType.primary,
+              width: double.infinity,
+              enabled: _disableEmailLoginButton() && !isLoading,
+              gradientBackground: const LinearGradient(
+                colors: [
+                  Color(0xFF1E3C72),
+                  Color(0xFF2A5298),
+                  Color(0xFF2A5298),
+                ],
+                tileMode: TileMode.decal,
               ),
-              const SizedBox(height: 24.0),
-              CustomTextField(
-                hintText: "Enter your password",
-                label: "Password",
-                showRequiredAsterisk: true,
-                controller: _passwordController,
-                focusNode: _passwordFocusNode,
-                isPassword: true,
-                errorText: _passwordError.isNotEmpty ? _passwordError : null,
-                onChanged: (value) {
-                  setState(() {
-                    if (_passwordError.isNotEmpty) {
-                      _passwordError = '';
-                    }
-                  });
-                },
-              ),
-              const SizedBox(height: 48),
-              CustomButton(
-                text: isLoading ? "Logging in..." : "Login",
-                onPressed: _onSubmitEmailLoginDetails,
-                type: ButtonType.primary,
-                width: double.infinity,
-                enabled: _disableEmailLoginButton() && !isLoading,
-                gradientBackground: const LinearGradient(
-                  colors: [
-                    Color(0xFF1E3C72),
-                    Color(0xFF2A5298),
-                    Color(0xFF2A5298),
-                  ],
-                  tileMode: TileMode.decal,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Flex(
-                direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/login/email/password-recovery',
-                      );
-                    },
-                    child: const Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Color(0xFFFF7501),
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400,
-                      ),
+            ),
+            const SizedBox(height: 16),
+            Flex(
+              direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/login/email/password-recovery',
+                    );
+                  },
+                  child: const Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      color: Color(0xFFFF7501),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w400,
                     ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            RichText(
+              text: TextSpan(
+                text: "Don't have an account?",
+                children: [
+                  TextSpan(
+                    text: " Register Now",
+                    style: const TextStyle(
+                      color: Color(0xFFFF7501),
+                      fontWeight: FontWeight.w600,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.pushReplacementNamed(context, '/register');
+                      },
                   ),
                 ],
-              ),
-              const SizedBox(height: 16),
-              RichText(
-                text: TextSpan(
-                  text: "Don't have an account?",
-                  children: [
-                    TextSpan(
-                      text: " Register Now",
-                      style: const TextStyle(
-                        color: Color(0xFFFF7501),
-                        fontWeight: FontWeight.w600,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pushNamed(context, '/register');
-                        },
-                    ),
-                  ],
-                  style: const TextStyle(
-                    color: Color(0xFF727272),
-                    fontSize: 14.0,
-                    fontFamily: 'Noto Sans',
-                  ),
+                style: const TextStyle(
+                  color: Color(0xFF727272),
+                  fontSize: 14.0,
+                  fontFamily: 'Noto Sans',
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

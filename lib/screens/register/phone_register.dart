@@ -190,183 +190,180 @@ class _PhoneRegisterState extends State<PhoneRegister> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 50),
-              const Text(
-                'Enter your details to Register',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Noto Sans',
-                  letterSpacing: 0,
-                ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 50),
+            const Text(
+              'Enter your details to Register',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Noto Sans',
+                letterSpacing: 0,
               ),
-              const SizedBox(height: 24),
-              CustomTextField(
-                label: "Full Name",
-                hintText: "Enter your full name here",
-                onChanged: (value) {
-                  if (_nameError.isNotEmpty) {
-                    setState(() {
-                      _nameError = '';
-                    });
-                  }
-                },
-                controller: _nameController,
-                focusNode: _nameFocusNode,
-                showRequiredAsterisk: true,
-                errorText: _nameError.isNotEmpty ? _nameError : null,
-              ),
-              const SizedBox(height: 32),
-              RepaintBoundary(
-                child: CustomMobileNumberField(
-                  label: "Mobile Number",
-                  hintText: "Enter your mobile number here",
-                  onChanged: (value) {
-                    if (_mobileNumberError.isNotEmpty) {
-                      setState(() {
-                        _mobileNumberError = '';
-                      });
-                    }
-                  },
-                  controller: _mobileNumberController,
-                  focusNode: _mobileNumberFocusNode,
-                  showRequiredAsterisk: true,
-                  onCountryCodeChanged: (value) =>
-                      _onCountryCodeChanged(value.code),
-                  errorText: _mobileNumberError.isNotEmpty
-                      ? _mobileNumberError
-                      : null,
-                ),
-              ),
-              const SizedBox(height: 32),
-              CustomTextField(
-                label: "Email Address",
-                hintText: "Enter your email ID here",
-                onChanged: (value) {
-                  if (_emailError.isNotEmpty) {
-                    setState(() {
-                      _emailError = '';
-                    });
-                  }
-                },
-                controller: _emailController,
-                focusNode: _emailFocusNode,
-                showRequiredAsterisk: true,
-                errorText: _emailError.isNotEmpty ? _emailError : null,
-              ),
-              const SizedBox(height: 32),
-              CustomTextField(
-                label: "Create Password",
-                hintText: "Create password",
-                onChanged: (value) {
-                  if (_passwordError.isNotEmpty) {
-                    setState(() {
-                      _passwordError = '';
-                    });
-                  }
-                },
-                controller: _passwordController,
-                focusNode: _passwordFocusNode,
-                showRequiredAsterisk: true,
-                isPassword: true,
-                errorText: _passwordError.isNotEmpty ? _passwordError : null,
-              ),
-              const SizedBox(height: 12),
-              CustomTextField(
-                hintText: "Confirm Password",
-                onChanged: (value) {
+            ),
+            const SizedBox(height: 24),
+            CustomTextField(
+              label: "Full Name",
+              hintText: "Enter your full name here",
+              onChanged: (value) {
+                if (_nameError.isNotEmpty) {
                   setState(() {
-                    if (_confirmPasswordError.isNotEmpty) {
-                      _confirmPasswordError = '';
-                    }
+                    _nameError = '';
                   });
+                }
+              },
+              controller: _nameController,
+              focusNode: _nameFocusNode,
+              showRequiredAsterisk: true,
+              errorText: _nameError.isNotEmpty ? _nameError : null,
+            ),
+            const SizedBox(height: 32),
+            RepaintBoundary(
+              child: CustomMobileNumberField(
+                label: "Mobile Number",
+                hintText: "Enter your mobile number here",
+                onChanged: (value) {
+                  if (_mobileNumberError.isNotEmpty) {
+                    setState(() {
+                      _mobileNumberError = '';
+                    });
+                  }
                 },
-                controller: _confirmPasswordController,
-                focusNode: _confirmPasswordFocusNode,
+                controller: _mobileNumberController,
+                focusNode: _mobileNumberFocusNode,
                 showRequiredAsterisk: true,
-                isPassword: false,
-                obscureText: true,
-                errorText: _confirmPasswordError.isNotEmpty
-                    ? _confirmPasswordError
-                    : null,
-                suffixIcon: _showPasswordMatchIcon
-                    ? Icon(
-                        _passwordMatch ? Icons.check : Icons.cancel_outlined,
-                        color: _passwordMatch ? Colors.green : Colors.red,
-                      )
+                onCountryCodeChanged: (value) =>
+                    _onCountryCodeChanged(value.code),
+                errorText: _mobileNumberError.isNotEmpty
+                    ? _mobileNumberError
                     : null,
               ),
-              const SizedBox(height: 32),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomCheckbox(value: _isChecked, onChanged: _toggleCheckbox),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        text: "I agree to the ",
-                        children: [
-                          TextSpan(
-                            text: "Terms of use ",
-                            style: const TextStyle(
-                              color: Color(0xFFFF7501),
-                              fontWeight: FontWeight.w600,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(context, '/terms-of-use');
-                              },
+            ),
+            const SizedBox(height: 32),
+            CustomTextField(
+              label: "Email Address",
+              hintText: "Enter your email ID here",
+              onChanged: (value) {
+                if (_emailError.isNotEmpty) {
+                  setState(() {
+                    _emailError = '';
+                  });
+                }
+              },
+              controller: _emailController,
+              focusNode: _emailFocusNode,
+              showRequiredAsterisk: true,
+              errorText: _emailError.isNotEmpty ? _emailError : null,
+            ),
+            const SizedBox(height: 32),
+            CustomTextField(
+              label: "Create Password",
+              hintText: "Create password",
+              onChanged: (value) {
+                if (_passwordError.isNotEmpty) {
+                  setState(() {
+                    _passwordError = '';
+                  });
+                }
+              },
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+              showRequiredAsterisk: true,
+              isPassword: true,
+              errorText: _passwordError.isNotEmpty ? _passwordError : null,
+            ),
+            const SizedBox(height: 12),
+            CustomTextField(
+              hintText: "Confirm Password",
+              onChanged: (value) {
+                setState(() {
+                  if (_confirmPasswordError.isNotEmpty) {
+                    _confirmPasswordError = '';
+                  }
+                });
+              },
+              controller: _confirmPasswordController,
+              focusNode: _confirmPasswordFocusNode,
+              showRequiredAsterisk: true,
+              isPassword: false,
+              obscureText: true,
+              errorText: _confirmPasswordError.isNotEmpty
+                  ? _confirmPasswordError
+                  : null,
+              suffixIcon: _showPasswordMatchIcon
+                  ? Icon(
+                      _passwordMatch ? Icons.check : Icons.cancel_outlined,
+                      color: _passwordMatch ? Colors.green : Colors.red,
+                    )
+                  : null,
+            ),
+            const SizedBox(height: 32),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomCheckbox(value: _isChecked, onChanged: _toggleCheckbox),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      text: "I agree to the ",
+                      children: [
+                        TextSpan(
+                          text: "Terms of use ",
+                          style: const TextStyle(
+                            color: Color(0xFFFF7501),
+                            fontWeight: FontWeight.w600,
                           ),
-                          const TextSpan(text: "and have read the "),
-                          TextSpan(
-                            text: "Privacy Policy",
-                            style: const TextStyle(
-                              color: Color(0xFFFF7501),
-                              fontWeight: FontWeight.w600,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(context, '/privacy-policy');
-                              },
-                          ),
-                        ],
-                        style: const TextStyle(
-                          color: Color(0xFF727272),
-                          fontSize: 14.0,
-                          fontFamily: 'Noto Sans',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushNamed(context, '/terms-of-use');
+                            },
                         ),
+                        const TextSpan(text: "and have read the "),
+                        TextSpan(
+                          text: "Privacy Policy",
+                          style: const TextStyle(
+                            color: Color(0xFFFF7501),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushNamed(context, '/privacy-policy');
+                            },
+                        ),
+                      ],
+                      style: const TextStyle(
+                        color: Color(0xFF727272),
+                        fontSize: 14.0,
+                        fontFamily: 'Noto Sans',
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 48),
-              CustomButton(
-                text: isLoading ? "Loading..." : "Continue",
-                onPressed: _onSubmitRegisterDetails,
-                type: ButtonType.primary,
-                width: double.infinity,
-                enabled: _isButtonEnabled && !isLoading,
-                gradientBackground: const LinearGradient(
-                  colors: [
-                    Color(0xFF1E3C72),
-                    Color(0xFF2A5298),
-                    Color(0xFF2A5298),
-                  ],
-                  tileMode: TileMode.decal,
                 ),
+              ],
+            ),
+            const SizedBox(height: 48),
+            CustomButton(
+              text: isLoading ? "Loading..." : "Continue",
+              onPressed: _onSubmitRegisterDetails,
+              type: ButtonType.primary,
+              width: double.infinity,
+              enabled: _isButtonEnabled && !isLoading,
+              gradientBackground: const LinearGradient(
+                colors: [
+                  Color(0xFF1E3C72),
+                  Color(0xFF2A5298),
+                  Color(0xFF2A5298),
+                ],
+                tileMode: TileMode.decal,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

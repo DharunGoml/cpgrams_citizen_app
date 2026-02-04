@@ -1,4 +1,3 @@
-import 'package:cpgrams_ui_kit/components/custom_header.dart';
 import 'package:cpgrams_ui_kit/components/footer_section.dart';
 import 'package:cpgrams_ui_kit/components/images.dart';
 import 'package:flutter/material.dart';
@@ -12,21 +11,16 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomHeader(
-        onLoginPressed: () => Navigator.pushNamed(context, '/login'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HeroSection(),
-            SizedBox(height: 41),
-            _raiseCompliant(),
-            SizedBox(height: 16),
-            _compliantsSection(),
-            FooterSection(),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          HeroSection(),
+          SizedBox(height: 41),
+          _raiseCompliant(),
+          SizedBox(height: 16),
+          _compliantsSection(),
+          FooterSection(),
+        ],
       ),
     );
   }

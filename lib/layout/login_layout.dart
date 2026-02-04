@@ -8,9 +8,8 @@ class LoginLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader(
-        onLoginPressed: () => Navigator.pushNamed(context, '/login'),
-      ),
+      backgroundColor: Colors.white,
+      appBar: const CustomHeader(variant: HeaderVariant.auth),
       body: child,
     );
   }

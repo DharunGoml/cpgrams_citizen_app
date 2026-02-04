@@ -1,3 +1,4 @@
+import 'package:cpgrams_citizen_app/layout/landing_layout.dart';
 import 'package:cpgrams_citizen_app/layout/login_layout.dart';
 import 'package:cpgrams_citizen_app/layout/register_layout.dart';
 import 'package:cpgrams_citizen_app/screens/landing/landing_screen.dart';
@@ -11,7 +12,7 @@ import 'package:cpgrams_citizen_app/screens/register/register.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
-  '/landing': (context) => LandingScreen(),
+  '/landing': (context) => LandingLayout(child: LandingScreen()),
   '/register': (context) => RegisterLayout(child: RegisterScreen()),
   '/register/phone': (context) => RegisterLayout(child: PhoneRegister()),
   '/login': (context) => LoginLayout(child: LoginScreen()),
