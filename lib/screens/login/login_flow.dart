@@ -1,3 +1,5 @@
+import 'package:cpgrams_citizen_app/screens/sso/sso_webview.dart';
+import 'package:cpgrams_citizen_app/services/auth_service.dart';
 import 'package:cpgrams_ui_kit/components/custom_button.dart';
 import 'package:cpgrams_ui_kit/components/custom_dropdown.dart';
 import 'package:cpgrams_ui_kit/components/images.dart';
@@ -26,6 +28,22 @@ class _LoginFlowState extends State<LoginFlow> {
     DropdownItem(label: 'English', value: 'en', icon: Icons.language),
     DropdownItem(label: 'हिन्दी', value: 'hindi', icon: Icons.language),
   ];
+
+  Future<void> _handleFetchSSO(String ssoType) async {
+    try {
+      final loginUrl = await AuthAPISerivce().fetchSSOLoginUrl(ssoType);
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SSOLoginWebView(initialUrl: loginUrl),
+        ),
+      );
+    } catch (e) {
+      debugPrint('Error fetching SSO URL: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -127,7 +145,13 @@ class _LoginFlowState extends State<LoginFlow> {
             ],
           ),
           const SizedBox(height: 40),
-          _iconLogin(() {}, janparichayLogo, null, 202.0, null),
+          _iconLogin(
+            () => _handleFetchSSO("janParichay"),
+            janparichayLogo,
+            null,
+            202.0,
+            null,
+          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
