@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cpgrams_citizen_app/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +16,9 @@ Future<void> main() async {
     ),
   );
   await dotenv.load(fileName: '.env');
+  if (Platform.isAndroid) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
   runApp(const MainApp());
 }
 
