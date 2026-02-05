@@ -25,8 +25,8 @@ class RegisterFlow extends StatefulWidget {
 class _RegisterFlowState extends State<RegisterFlow> {
   DropdownItem? selectedLanguage;
   final List<DropdownItem> languages = [
-    DropdownItem(label: 'English', value: 'en', icon: Icons.language),
-    DropdownItem(label: 'हिन्दी', value: 'hindi', icon: Icons.language),
+    DropdownItem(label: 'English', value: 'en_US', icon: Icons.language),
+    DropdownItem(label: 'हिन्दी', value: 'hi', icon: Icons.language),
   ];
 
   Future<void> _handleFetchSSO(String ssoType) async {
@@ -188,22 +188,25 @@ class _RegisterFlowState extends State<RegisterFlow> {
     double width,
     double? height,
   ) {
-    return Container(
-      width: width,
-      height: height ?? 68,
-      padding:
-          padding ?? EdgeInsets.symmetric(vertical: 16.0, horizontal: 18.0),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade300, width: 1.0),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: IconButton(
-        icon: Image.asset(iconPath),
-        padding: EdgeInsets.zero,
-        splashRadius: (width + (height ?? 68)) / 2,
-        onPressed: onPressed,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: width,
+        height: height ?? 68,
+        padding:
+            padding ?? EdgeInsets.symmetric(vertical: 16.0, horizontal: 18.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade300, width: 1.0),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: IconButton(
+          icon: Image.asset(iconPath),
+          padding: EdgeInsets.zero,
+          splashRadius: (width + (height ?? 68)) / 2,
+          onPressed: onPressed,
+        ),
       ),
     );
   }

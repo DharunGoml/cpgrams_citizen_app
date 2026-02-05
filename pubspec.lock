@@ -46,7 +46,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "6b2af936cfca7d701460764b51ae289da1818309"
+      resolved-ref: ca766a28594a7edf4e2ee0187da79cfd87b76ad2
       url: "git@github.com-work:DharunGoml/cpgrams_ui_kit.git"
     source: git
     version: "1.0.0+1"

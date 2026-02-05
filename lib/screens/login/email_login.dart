@@ -1,6 +1,7 @@
 import 'package:cpgrams_citizen_app/services/auth_service.dart';
 import 'package:cpgrams_citizen_app/utils/validator.dart';
 import 'package:cpgrams_ui_kit/components/custom_button.dart';
+import 'package:cpgrams_ui_kit/components/custom_popup.dart';
 import 'package:cpgrams_ui_kit/components/custom_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,25 @@ class _EmailLoginState extends State<EmailLogin> {
       await Future.delayed(const Duration(seconds: 2));
 
       if (!mounted) return;
-
+      CustomPopup.show(
+        context: context,
+        title: 'Login Successfully',
+        titleIcon: Icons.check_circle,
+        titleIconColor: Colors.green,
+        buttonType: PopupButtonType.ok,
+        okText: 'Done',
+        showCloseIcon: true,
+        barrierDismissible: false,
+        buttonWidth: 100,
+        buttonHeight: 40,
+        child: const Text(
+          "You're successfully registered! You can now log in using your phone number or email to submit grievances and track their status.",
+          style: TextStyle(fontSize: 14.0, color: Color(0xFF424242)),
+        ),
+        onOkPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
       setState(() {
         isLoading = false;
       });
