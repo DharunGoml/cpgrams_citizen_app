@@ -2,7 +2,7 @@ import 'package:cpgrams_citizen_app/utils/validator.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cpgrams_citizen_app/services/auth_service.dart';
 class PhoneRegister extends StatefulWidget {
   const PhoneRegister({super.key});
 
@@ -174,18 +174,86 @@ class _PhoneRegisterState extends State<PhoneRegister> {
     if (!_validateForm()) {
       return;
     }
-    //TODO: To implement the register API.
-    debugPrint(
-      "Submitting registration details for ${_nameController.text} with email ${_emailController.text} and mobile number $_countryCode${_mobileNumberController.text}",
-    );
-
+   
     setState(() {
-      isLoading = false;
+      isLoading = true;
     });
+
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+
+      // Split full name into first name and last name
+      final fullName = _nameController.text.trim();
+
+      String firstName = '';
+      String lastName = '';
+
+      if (fullName.contains(' ')) {
+        final lastSpaceIndex = fullName.lastIndexOf(' ');
+        firstName = fullName.substring(0, lastSpaceIndex);
+        lastName = fullName.substring(lastSpaceIndex + 1);
+      } else {
+        // single-word name
+        firstName = fullName;
+        lastName = '';
+      }
+
+      final response = await AuthAPISerivce().register(
+        firstName: firstName,
+        lastName: lastName,
+        password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
+        identifiers: [
+          {
+            'type': 'MOBILE',
+            'value': '$_countryCode${_mobileNumberController.text}',
+          },
+          {'type': 'EMAIL', 'value': _emailController.text},
+        ],
+      );
+
+      if (!mounted) return;
+
+      if (response.success) {
+        // Navigate to success screen or login
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/login');
+        }
+      } else {
+        // Show error message
+        _showErrorSnackbar(
+          response.message ?? 'Registration failed. Please try again.',
+        );
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      _showErrorSnackbar('An error occurred: ${e.toString()}');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void _onCountryCodeChanged(String countryCode) {
     _countryCode = countryCode;
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 4),
+      ),
+    );
   }
 
   @override
