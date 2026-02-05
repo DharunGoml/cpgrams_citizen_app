@@ -9,10 +9,7 @@ class SSOCallbackHandler {
 
     if (code == null || ssoType == null) return;
 
-    await AuthAPISerivce().exchangeSSOToken(
-      ssoType: ssoType,
-      code: code,
-    );
+    await AuthAPISerivce().exchangeSSOToken(ssoType: ssoType, code: code);
 
     // TODO: navigate to home
   }

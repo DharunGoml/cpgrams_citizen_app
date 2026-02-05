@@ -1,4 +1,3 @@
-import 'package:cpgrams_ui_kit/components/custom_otp.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

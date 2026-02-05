@@ -1,8 +1,9 @@
+import 'package:cpgrams_citizen_app/services/auth_service.dart';
 import 'package:cpgrams_citizen_app/utils/validator.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:cpgrams_citizen_app/services/auth_service.dart';
+
 class PhoneRegister extends StatefulWidget {
   const PhoneRegister({super.key});
 
@@ -34,6 +35,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
   bool _isButtonEnabled = false;
   bool _passwordMatch = false;
   bool _showPasswordMatchIcon = false;
+  String errorMessage = '';
 
   @override
   void initState() {
@@ -114,6 +116,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
       _nameError = '';
       _confirmPasswordError = '';
       _mobileNumberError = '';
+      errorMessage = '';
     });
 
     if (_nameController.text.isEmpty) {
@@ -174,7 +177,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
     if (!_validateForm()) {
       return;
     }
-   
+
     setState(() {
       isLoading = true;
     });
@@ -198,7 +201,6 @@ class _PhoneRegisterState extends State<PhoneRegister> {
         firstName = fullName.substring(0, lastSpaceIndex);
         lastName = fullName.substring(lastSpaceIndex + 1);
       } else {
-        // single-word name
         firstName = fullName;
         lastName = '';
       }
@@ -220,40 +222,41 @@ class _PhoneRegisterState extends State<PhoneRegister> {
       if (!mounted) return;
 
       if (response.success) {
-        // Navigate to success screen or login
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/login');
+          Navigator.of(context).pushReplacementNamed(
+            '/register/phone/otp',
+            arguments: {
+              'mobileNumber': '$_countryCode${_mobileNumberController.text}',
+              'email': _emailController.text,
+              'uuid': response.data?['data']?['uuid'] ?? '',
+            },
+          );
         }
       } else {
-        // Show error message
-        _showErrorSnackbar(
-          response.message ?? 'Registration failed. Please try again.',
-        );
         setState(() {
           isLoading = false;
+          errorMessage = response.message ?? 'Registration failed';
         });
       }
+      // if (mounted) {
+      //   Navigator.of(context).pushNamed(
+      //     '/register/phone/otp',
+      //     arguments: {
+      //       'mobileNumber': '$_countryCode${_mobileNumberController.text}',
+      //       'email': _emailController.text,
+      //     },
+      //   );
+      // }
     } catch (e) {
-      if (!mounted) return;
-      _showErrorSnackbar('An error occurred: ${e.toString()}');
       setState(() {
         isLoading = false;
+        errorMessage = 'An error occurred: ${e.toString()}';
       });
     }
   }
 
   void _onCountryCodeChanged(String countryCode) {
     _countryCode = countryCode;
-  }
-
-  void _showErrorSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 4),
-      ),
-    );
   }
 
   @override
@@ -327,6 +330,8 @@ class _PhoneRegisterState extends State<PhoneRegister> {
               focusNode: _emailFocusNode,
               showRequiredAsterisk: true,
               errorText: _emailError.isNotEmpty ? _emailError : null,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.done,
             ),
             const SizedBox(height: 32),
             CustomTextField(
@@ -416,6 +421,13 @@ class _PhoneRegisterState extends State<PhoneRegister> {
               ],
             ),
             const SizedBox(height: 48),
+            if (errorMessage.isNotEmpty) ...[
+              Text(
+                errorMessage,
+                style: const TextStyle(color: Colors.red, fontSize: 14.0),
+              ),
+              const SizedBox(height: 48),
+            ],
             CustomButton(
               text: isLoading ? "Loading..." : "Continue",
               onPressed: _onSubmitRegisterDetails,
@@ -431,6 +443,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
                 tileMode: TileMode.decal,
               ),
             ),
+            const SizedBox(height: 28),
           ],
         ),
       ),

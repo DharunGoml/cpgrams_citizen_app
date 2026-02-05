@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cpgrams_citizen_app/models/api_response.dart';
 import 'package:cpgrams_citizen_app/models/auth/otp_modal.dart';
 import 'package:cpgrams_citizen_app/network/api_headers.dart';
@@ -41,6 +43,8 @@ class AuthAPISerivce {
         errorMessage = e.message!;
       }
       return ApiResponse.failure(message: errorMessage);
+    } catch (e) {
+      return ApiResponse.failure(message: 'An unexpected error occurred');
     }
   }
 
@@ -151,7 +155,8 @@ class AuthAPISerivce {
     required String code,
   }) async {
     try {
-      final response = await DioClient.dio.post(
+      // final response =
+      await DioClient.dio.post(
         "/auth/sso/v1/generate-token",
         options: Options(
           headers: {
@@ -163,38 +168,41 @@ class AuthAPISerivce {
         ),
       );
 
-      final data = response.data;
+      // final data = response.data;
 
-      print('SSO Token Exchange Response: $data');
+      // print('SSO Token Exchange Response: $data');
     } catch (e) {
       debugPrint('Error exchanging SSO token: $e');
     }
   }
 
-
   Future<ApiResponse<Map<String, dynamic>>> register({
-     required String firstName,
-     required String lastName,
-     required String password,
-     required String confirmPassword,
-     required List<Map<String, String>> identifiers,
+    required String firstName,
+    required String lastName,
+    required String password,
+    required String confirmPassword,
+    required List<Map<String, String>> identifiers,
   }) async {
     try {
       final payload = {
-      "data": {
-        "firstName": firstName,
-        "lastName": lastName,
-        "password": password,
-        "confirmPassword": confirmPassword,
-        "identifiers": identifiers,
-      }
+        "data": {
+          "firstName": firstName,
+          "lastName": lastName,
+          "password": password,
+          "language": "en_US",
+          "confirmPassword": confirmPassword,
+          "identifiers": identifiers,
+        },
       };
 
       final response = await DioClient.dio.post(
-        "/users/api/v1/citizens/verify",
-        data: payload,
+        "/users/api/v1/citizens/register",
+        data: jsonEncode(payload),
         options: Options(
-          headers: ApiHeaders.build(sourceId: 'citizen.web', clientId: 'darpg'),
+          headers: ApiHeaders.build(
+            sourceId: 'citizen.web',
+            clientId: 'auth-service',
+          ),
         ),
       );
 
@@ -202,7 +210,6 @@ class AuthAPISerivce {
         data: response.data,
         message: 'Registration successful',
       );
-
     } on DioException catch (e) {
       String errorMessage = 'An error occurred during registration';
       if (e.response?.data?['errors'] != null) {
@@ -215,7 +222,44 @@ class AuthAPISerivce {
       }
       return ApiResponse.failure(message: errorMessage);
     }
+  }
 
+  Future<ApiResponse<Map<String, dynamic>>> verifyOtp({
+    required String uuid,
+    required String emailOtp,
+    required String smsOtp,
+  }) async {
+    try {
+      final payload = {
+        "data": {"uuid": uuid, "emailOtp": emailOtp, "smsOtp": smsOtp},
+      };
 
+      final response = await DioClient.dio.post(
+        "/users/api/v1/citizens/verify",
+        data: jsonEncode(payload),
+        options: Options(
+          headers: ApiHeaders.build(sourceId: "citizen.web", clientId: "darpg"),
+        ),
+      );
 
-}}
+      return ApiResponse.success(
+        data: response.data,
+        message: 'OTP verified successfully',
+      );
+    } on DioException catch (e) {
+      String errorMessage = 'An error occurred during Verifying OTP';
+      if (e.response?.data?['errors'] != null) {
+        final errors = e.response!.data['errors'];
+        if (errors is List && errors.isNotEmpty) {
+          errorMessage = errors[0]['message'] ?? errorMessage;
+        }
+      } else if (e.message != null) {
+        errorMessage = e.message!;
+      }
+      return ApiResponse.failure(message: errorMessage);
+    } catch (e) {
+      debugPrint('Error verifying OTP: $e');
+      return ApiResponse.failure(message: 'An unexpected error occurred');
+    }
+  }
+}
