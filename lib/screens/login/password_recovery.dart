@@ -1,3 +1,5 @@
+import 'package:cpgrams_citizen_app/services/auth_service.dart';
+import 'package:cpgrams_citizen_app/utils/validator.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -19,22 +21,56 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
   String _otp = '';
   bool _isLoading = false;
   String _errorMessage = '';
+  String _emailError = '';
+  String _passwordError = '';
+  String _confirmPasswordError = '';
   bool _showError = false;
   bool _showSuccess = false;
+  bool _passwordMatch = false;
+  bool _showPasswordMatchIcon = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(() => setState(() {}));
+    _passwordController.addListener(_checkPasswordMatch);
+    _confirmPasswordController.addListener(_checkPasswordMatch);
+  }
 
   @override
   void dispose() {
+    _emailController.removeListener(() => setState(() {}));
+    _passwordController.removeListener(_checkPasswordMatch);
+    _confirmPasswordController.removeListener(_checkPasswordMatch);
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  // Move to next step after successful response
+  void _checkPasswordMatch() {
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    final shouldShowIcon = confirmPassword.isNotEmpty;
+    final passwordMatch = password == confirmPassword && password.isNotEmpty;
+
+    if (_showPasswordMatchIcon != shouldShowIcon ||
+        _passwordMatch != passwordMatch) {
+      setState(() {
+        _showPasswordMatchIcon = shouldShowIcon;
+        _passwordMatch = passwordMatch;
+      });
+    }
+  }
+
   void _goToNextStep(String nextStep) {
     setState(() {
       _formType = nextStep;
       _errorMessage = '';
+      _emailError = '';
+      _passwordError = '';
+      _confirmPasswordError = '';
       _showError = false;
       _showSuccess = false;
     });
@@ -51,10 +87,9 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
 
   Future<void> _onOtpResend() async {
     try {
-      // TODO: Call your API to resend OTP
       // final response = await AuthAPIService().resendPasswordRecoveryOTP(_emailController.text);
 
-      await Future.delayed(const Duration(seconds: 1)); // Simulate API call
+      await Future.delayed(const Duration(seconds: 1));
 
       if (!mounted) return;
 
@@ -79,79 +114,75 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
     }
   }
 
-  Future<void> _handleEmailSubmit() async {
+  void _handleEmailSubmit() {
     setState(() {
-      _isLoading = true;
-      _errorMessage = '';
+      _emailError = '';
     });
 
-    try {
-      // TODO: Call your API to send OTP
-      // final response = await AuthAPIService().sendPasswordRecoveryOTP(_emailController.text);
-
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-      if (!mounted) return;
-
-      // If successful, move to OTP verification
-      _goToNextStep('OTP');
-    } catch (e) {
-      if (!mounted) return;
+    if (_emailController.text.isEmpty) {
       setState(() {
-        _errorMessage = 'Failed to send OTP. Please try again.';
-        _isLoading = false;
+        _emailError = 'Email or mobile number is required';
       });
+      return;
     }
+
+    if (!isValidEmail(_emailController.text)) {
+      setState(() {
+        _emailError = 'Please enter a valid email address';
+      });
+      return;
+    }
+
+    _goToNextStep('OTP');
   }
 
-  Future<void> _handleOTPSubmit() async {
-    if (_otp.length < 6) {
+  void _handleOTPSubmit() {
+    if (_otp.length != 6) {
       setState(() {
-        _errorMessage = 'Please enter a valid 6-digit OTP.';
+        _errorMessage = 'Please enter a valid 6-digit OTP';
         _showError = true;
       });
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-      _errorMessage = '';
-      _showError = false;
-    });
-
-    try {
-      // TODO: Call your API to verify OTP
-      // final response = await AuthAPIService().verifyPasswordRecoveryOTP(_emailController.text, _otp);
-
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-      if (!mounted) return;
-
-      setState(() {
-        _showSuccess = true;
-        _isLoading = false;
-      });
-
-      // If successful, move to password reset
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return;
-
-      _goToNextStep('Password');
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _errorMessage = 'Invalid OTP. Please try again.';
-        _showError = true;
-        _isLoading = false;
-      });
-    }
+    _goToNextStep('Password');
   }
 
   Future<void> _handlePasswordSubmit() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
+    setState(() {
+      _passwordError = '';
+      _confirmPasswordError = '';
+      _errorMessage = '';
+    });
+
+    bool isValid = true;
+
+    if (_passwordController.text.isEmpty) {
       setState(() {
-        _errorMessage = 'Passwords do not match';
+        _passwordError = 'Password is required';
       });
+      isValid = false;
+    } else if (!isValidPassword(_passwordController.text)) {
+      setState(() {
+        _passwordError =
+            'Password must be at least 8 characters with letters, numbers, and special characters';
+      });
+      isValid = false;
+    }
+
+    if (_confirmPasswordController.text.isEmpty) {
+      setState(() {
+        _confirmPasswordError = 'Confirm Password is required';
+      });
+      isValid = false;
+    } else if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _confirmPasswordError = 'Passwords do not match';
+      });
+      isValid = false;
+    }
+
+    if (!isValid) {
       return;
     }
 
@@ -161,19 +192,32 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
     });
 
     try {
-      // TODO: Call your API to reset password
-      // final response = await AuthAPIService().resetPassword(_emailController.text, _passwordController.text);
-
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-      if (!mounted) return;
-
-      // Show success message and navigate to login
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password reset successfully!')),
+      final response = await AuthAPISerivce().passwordReset(
+        identifier: _emailController.text,
+        otp: _otp,
+        newPassword: _passwordController.text,
+        conformPassword: _confirmPasswordController.text,
       );
 
-      Navigator.pushReplacementNamed(context, '/login/email');
+      if (!mounted) return;
+      if (response.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              response.data?['data']?['message'] ??
+                  'Password reset successfully!',
+            ),
+          ),
+        );
+
+        Navigator.pushReplacementNamed(context, '/login/email');
+      } else {
+        setState(() {
+          _errorMessage =
+              response.message ?? 'Failed to reset password. Please try again.';
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -214,19 +258,26 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
         const SizedBox(height: 48),
         CustomTextField(
           controller: _emailController,
-          hintText: 'Enter your email',
+          hintText: 'Enter your email or mobile number',
           label:
               'Enter mobile number or registered email address to receive OTP',
           keyboardType: TextInputType.emailAddress,
           showRequiredAsterisk: true,
-          errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+          errorText: _emailError.isNotEmpty ? _emailError : null,
+          onChanged: (value) {
+            if (_emailError.isNotEmpty) {
+              setState(() {
+                _emailError = '';
+              });
+            }
+          },
         ),
         const SizedBox(height: 48),
         CustomButton(
           text: _isLoading ? 'Sending...' : 'Send OTP',
           onPressed: _handleEmailSubmit,
           width: double.infinity,
-          enabled: !_isLoading,
+          enabled: _emailController.text.isNotEmpty && !_isLoading,
           gradientBackground: const LinearGradient(
             colors: [Color(0xFF1E3C72), Color(0xFF2A5298), Color(0xFF2A5298)],
           ),
@@ -384,26 +435,61 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
           label: 'New Password',
           isPassword: true,
           showRequiredAsterisk: true,
+          errorText: _passwordError.isNotEmpty ? _passwordError : null,
+          onChanged: (value) {
+            if (_passwordError.isNotEmpty) {
+              setState(() {
+                _passwordError = '';
+              });
+            }
+          },
         ),
         const SizedBox(height: 24),
         CustomTextField(
           controller: _confirmPasswordController,
           hintText: 'Confirm new password',
           label: 'Confirm Password',
-          isPassword: true,
+          isPassword: false,
+          obscureText: true,
           showRequiredAsterisk: true,
-          errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+          errorText: _confirmPasswordError.isNotEmpty
+              ? _confirmPasswordError
+              : null,
+          onChanged: (value) {
+            if (_confirmPasswordError.isNotEmpty) {
+              setState(() {
+                _confirmPasswordError = '';
+              });
+            }
+          },
+          suffixIcon: _showPasswordMatchIcon
+              ? Icon(
+                  _passwordMatch ? Icons.check : Icons.cancel_outlined,
+                  color: _passwordMatch ? Colors.green : Colors.red,
+                )
+              : null,
         ),
         const SizedBox(height: 48),
         CustomButton(
           text: _isLoading ? 'Resetting...' : 'Reset Password',
           onPressed: _handlePasswordSubmit,
           width: double.infinity,
-          enabled: !_isLoading,
+          enabled:
+              _passwordController.text.isNotEmpty &&
+              _confirmPasswordController.text.isNotEmpty &&
+              _passwordMatch &&
+              !_isLoading,
           gradientBackground: const LinearGradient(
             colors: [Color(0xFF1E3C72), Color(0xFF2A5298), Color(0xFF2A5298)],
           ),
         ),
+        if (_errorMessage.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text(
+            _errorMessage,
+            style: const TextStyle(color: Colors.red, fontSize: 14.0),
+          ),
+        ],
       ],
     );
   }
