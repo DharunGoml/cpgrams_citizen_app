@@ -201,16 +201,34 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
 
       if (!mounted) return;
       if (response.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              response.data?['data']?['message'] ??
-                  'Password reset successfully!',
-            ),
+        CustomPopup.show(
+          context: context,
+          title: 'Password Updated Successfully',
+          titleIcon: Icons.check_circle,
+          titleIconColor: Colors.green,
+          buttonType: PopupButtonType.ok,
+          okText: 'Login now',
+          showCloseIcon: true,
+          barrierDismissible: false,
+          buttonWidth: 110,
+          buttonHeight: 40,
+          child: const Text(
+            "Your password has been updated successfully. You can use your new password to login.",
+            style: TextStyle(fontSize: 14.0, color: Color(0xFF424242)),
           ),
+          onClose: () {
+            setState(() {
+              _isLoading = false;
+            });
+            Navigator.pop(context);
+          },
+          onOkPressed: () {
+            setState(() {
+              _isLoading = false;
+            });
+            Navigator.pushReplacementNamed(context, '/login/email');
+          },
         );
-
-        Navigator.pushReplacementNamed(context, '/login/email');
       } else {
         setState(() {
           _errorMessage =
