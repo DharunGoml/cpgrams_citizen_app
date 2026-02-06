@@ -262,4 +262,46 @@ class AuthAPISerivce {
       return ApiResponse.failure(message: 'An unexpected error occurred');
     }
   }
+
+  Future<ApiResponse<Map<String, dynamic>>> passwordReset({
+    required String identifier,
+    required String otp,
+    required String newPassword,
+    required String conformPassword,
+  }) async {
+    try {
+      final payload = {
+        "identifier": identifier,
+        "otp": otp,
+        "newPassword": newPassword,
+        "conformPassword": conformPassword,
+      };
+      final response = await DioClient.dio.post(
+        "/users/api/v1/confirm-password-reset",
+        data: jsonEncode(payload),
+        options: Options(
+          headers: ApiHeaders.build(sourceId: "citizen.web", clientId: "darpg"),
+        ),
+      );
+
+      return ApiResponse.success(
+        data: response.data,
+        message: 'Password reset successful',
+      );
+    } on DioException catch (e) {
+      String errorMessage = 'An error occurred during Verifying OTP';
+      if (e.response?.data?['errors'] != null) {
+        final errors = e.response!.data['errors'];
+        if (errors is List && errors.isNotEmpty) {
+          errorMessage = errors[0]['message'] ?? errorMessage;
+        }
+      } else if (e.message != null) {
+        errorMessage = e.message!;
+      }
+      return ApiResponse.failure(message: errorMessage);
+    } catch (e) {
+      debugPrint('Error resetting password: $e');
+      return ApiResponse.failure(message: "An unexpected error occurred");
+    }
+  }
 }
