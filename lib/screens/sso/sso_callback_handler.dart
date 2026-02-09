@@ -1,4 +1,4 @@
-import 'package:cpgrams_citizen_app/services/auth_service.dart';
+import 'package:cpgrams_citizen_app/services/auth/auth_service.dart';
 
 class SSOCallbackHandler {
   static Future<void> handle(String callbackUrl) async {

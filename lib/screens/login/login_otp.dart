@@ -1,5 +1,5 @@
 import 'package:cpgrams_citizen_app/models/auth/otp_modal.dart';
-import 'package:cpgrams_citizen_app/services/auth_service.dart';
+import 'package:cpgrams_citizen_app/services/auth/auth_service.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class _LoginOtpState extends State<LoginOtp> {
             style: TextStyle(fontSize: 14.0, color: Color(0xFF424242)),
           ),
           onOkPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushReplacementNamed(context, '/grievance/list');
           },
         );
       } else {

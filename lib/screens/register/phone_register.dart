@@ -1,4 +1,4 @@
-import 'package:cpgrams_citizen_app/services/auth_service.dart';
+import 'package:cpgrams_citizen_app/services/auth/auth_service.dart';
 import 'package:cpgrams_citizen_app/utils/validator.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';

@@ -1,5 +1,8 @@
+import 'package:cpgrams_citizen_app/screens/landing/upload_document.dart';
 import 'package:cpgrams_ui_kit/components/custom_button.dart';
+import 'package:cpgrams_ui_kit/components/custom_popup.dart';
 import 'package:cpgrams_ui_kit/components/images.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class HeroSection extends StatefulWidget {
@@ -10,6 +13,47 @@ class HeroSection extends StatefulWidget {
 }
 
 class _HeroSectionState extends State<HeroSection> {
+  final TextEditingController _complaintController = TextEditingController();
+
+  @override
+  void dispose() {
+    _complaintController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleDocumentUpload() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'jpg', 'png'],
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.single.path != null) {
+        if (!mounted) return;
+
+        // Show popup with processing animation
+        CustomPopup.show(
+          context: context,
+          child: UploadDocument(
+            filePath: result.files.single.path!,
+            fileName: result.files.single.name,
+            onDocumentProcessed: (String fileName, String documentReport) {
+              debugPrint("File: $fileName, Report: $documentReport");
+              // Set the extracted text in the TextField
+              _complaintController.text = documentReport;
+              Navigator.of(context).pop(); // Close the popup
+            },
+          ),
+          buttonType: PopupButtonType.none,
+          title: "",
+        );
+      }
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -112,18 +156,21 @@ class _HeroSectionState extends State<HeroSection> {
               "Speak on the mic to register your complaints",
               "हिंदी, தமிழ், తెలుగు, অসমীয়া अन्य",
               "0xFFFBE9ED",
+              () {},
             ),
             SizedBox(height: 10),
             _card(
               "Upload a written letter to file your complaint",
               "Only PDF, JPG, and PNG formats are accepted",
               "0xFFEDF7E6",
+              _handleDocumentUpload,
             ),
             SizedBox(height: 10),
             _card(
               "Write down to register your complaint...",
               "File your complaint",
               "0xFFEEF3FE",
+              () {},
             ),
             SizedBox(height: 10),
             CustomButton(
@@ -151,9 +198,14 @@ class _HeroSectionState extends State<HeroSection> {
     );
   }
 
-  Widget _card(String title, String subtitle, String color) {
+  Widget _card(
+    String title,
+    String subtitle,
+    String color,
+    VoidCallback? onTap,
+  ) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         constraints: BoxConstraints(minHeight: 99),
@@ -228,6 +280,7 @@ class _HeroSectionState extends State<HeroSection> {
           const SizedBox(height: 16),
           Expanded(
             child: TextField(
+              controller: _complaintController,
               maxLines: null,
               expands: true,
               textAlignVertical: TextAlignVertical.top,

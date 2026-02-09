@@ -1,4 +1,4 @@
-import 'package:cpgrams_citizen_app/services/auth_service.dart';
+import 'package:cpgrams_citizen_app/services/auth/auth_service.dart';
 import 'package:cpgrams_citizen_app/utils/validator.dart';
 import 'package:cpgrams_ui_kit/components/custom_button.dart';
 import 'package:cpgrams_ui_kit/components/custom_popup.dart';
@@ -85,39 +85,50 @@ class _EmailLoginState extends State<EmailLogin> {
     try {
       await Future.delayed(const Duration(seconds: 2));
 
-      if (!mounted) return;
-      CustomPopup.show(
-        context: context,
-        title: 'Login Successfully',
-        titleIcon: Icons.check_circle,
-        titleIconColor: Colors.green,
-        buttonType: PopupButtonType.ok,
-        okText: 'Done',
-        showCloseIcon: true,
-        barrierDismissible: false,
-        buttonWidth: 100,
-        buttonHeight: 40,
-        child: const Text(
-          "You're successfully registered! You can now log in using your phone number or email to submit grievances and track their status.",
-          style: TextStyle(fontSize: 14.0, color: Color(0xFF424242)),
-        ),
-        onOkPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      setState(() {
-        isLoading = false;
-      });
-
       final response = await AuthAPISerivce().login(
         grantType: "password",
         userName: _emailController.text,
         password: _passwordController.text,
       );
       if (response.success) {
+        if (!mounted) return;
+        CustomPopup.show(
+          context: context,
+          title: 'Login Successfully',
+          titleIcon: Icons.check_circle,
+          titleIconColor: Colors.green,
+          buttonType: PopupButtonType.ok,
+          okText: 'Done',
+          showCloseIcon: true,
+          barrierDismissible: false,
+          buttonWidth: 100,
+          buttonHeight: 40,
+          child: const Text(
+            "You're successfully registered! You can now log in using your phone number or email to submit grievances and track their status.",
+            style: TextStyle(fontSize: 14.0, color: Color(0xFF424242)),
+          ),
+          onOkPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/grievance/list',
+              (route) => false,
+            );
+          },
+          onClose: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/grievance/list',
+              (route) => false,
+            );
+          },
+        );
+        setState(() {
+          isLoading = false;
+        });
       } else {
         setState(() {
           _emailError = response.message ?? 'Login failed';
+          isLoading = false;
         });
       }
     } catch (e) {

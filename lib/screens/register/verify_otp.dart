@@ -1,5 +1,5 @@
 import 'package:cpgrams_citizen_app/models/auth/otp_modal.dart';
-import 'package:cpgrams_citizen_app/services/auth_service.dart';
+import 'package:cpgrams_citizen_app/services/auth/auth_service.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
