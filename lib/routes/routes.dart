@@ -1,6 +1,8 @@
 import 'package:cpgrams_citizen_app/layout/landing_layout.dart';
 import 'package:cpgrams_citizen_app/layout/login_layout.dart';
 import 'package:cpgrams_citizen_app/layout/register_layout.dart';
+import 'package:cpgrams_citizen_app/layout/citizen_layout.dart';
+import 'package:cpgrams_citizen_app/screens/grievances/track_grievance/track_grievance.dart';
 import 'package:cpgrams_citizen_app/screens/landing/landing_screen.dart';
 import 'package:cpgrams_citizen_app/screens/login/email_login.dart';
 import 'package:cpgrams_citizen_app/screens/login/login_flow.dart';
@@ -23,4 +25,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/login/phone/otp': (context) => LoginLayout(child: LoginOtp()),
   '/login/email/password-recovery': (context) =>
       LoginLayout(child: PasswordRecovery()),
+  '/grievance/list': (context) => CitizenLayout(child: TrackGrievance()),
 };

@@ -9,7 +9,7 @@ class DioClient {
       BaseOptions(
         baseUrl: dotenv.env['PUBLIC_API_URL'] ?? '',
         connectTimeout: const Duration(milliseconds: 10000),
-        receiveTimeout: const Duration(milliseconds: 10000),
+        // receiveTimeout: const Duration(milliseconds: 10000),
         headers: {'Accept': 'application/json'},
       ),
     );

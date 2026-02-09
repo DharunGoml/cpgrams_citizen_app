@@ -1,11 +1,53 @@
+import 'package:cpgrams_citizen_app/services/auth/auth_service.dart';
 import 'package:cpgrams_ui_kit/components/footer_section.dart';
 import 'package:cpgrams_ui_kit/components/images.dart';
 import 'package:flutter/material.dart';
 
 import 'landing_hero_section.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
+
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Defer guest login to not block initial render
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchGuestLogin();
+    });
+  }
+
+  Future<void> _fetchGuestLogin() async {
+    try {
+      final response = await AuthAPISerivce().guestLogin();
+
+      if (!mounted) return;
+      if (response.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.message ?? 'Guest login successful'),
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.green.shade500,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.message ?? 'Guest login failed'),
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.red.shade500,
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error during guest login: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

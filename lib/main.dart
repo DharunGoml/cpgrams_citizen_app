@@ -16,8 +16,9 @@ Future<void> main() async {
     ),
   );
   await dotenv.load(fileName: '.env');
+  // Only enable debugging in debug mode, not in release
   if (Platform.isAndroid) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(false);
   }
   runApp(const MainApp());
 }
