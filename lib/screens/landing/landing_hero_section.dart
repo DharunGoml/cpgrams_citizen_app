@@ -39,7 +39,6 @@ class _HeroSectionState extends State<HeroSection> {
             filePath: result.files.single.path!,
             fileName: result.files.single.name,
             onDocumentProcessed: (String fileName, String documentReport) {
-              debugPrint("File: $fileName, Report: $documentReport");
               // Set the extracted text in the TextField
               _complaintController.text = documentReport;
               Navigator.of(context).pop(); // Close the popup

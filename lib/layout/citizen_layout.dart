@@ -1,4 +1,3 @@
-import 'package:cpgrams_citizen_app/utils/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 
 class CitizenLayout extends StatelessWidget {
@@ -12,7 +11,7 @@ class CitizenLayout extends StatelessWidget {
       body: SafeArea(
         bottom: true,
         maintainBottomViewPadding: true,
-        child: DoubleBackToCloseWidget(child: child),
+        child: child,
       ),
       backgroundColor: const Color(0xFFF5F7FA),
     );

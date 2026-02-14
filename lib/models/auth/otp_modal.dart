@@ -37,3 +37,42 @@ class EmailOtpPayload extends SendOtpPayload {
     };
   }
 }
+
+class MobileIdentityVerify extends SendOtpPayload {
+  final String mobile;
+  final String requestType;
+
+  MobileIdentityVerify({required this.mobile, required this.requestType});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'data': {
+        'identityMobile': mobile,
+        'type': 'MOBILE',
+        'otpRequestType': requestType,
+      },
+    };
+  }
+}
+
+class VerifyOtpPayload extends SendOtpPayload {
+  final String mobile;
+  final String otp;
+  final String name;
+  final String email;
+
+  VerifyOtpPayload({
+    required this.mobile,
+    required this.otp,
+    required this.name,
+    required this.email,
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'data': {'name': name, 'email': email, 'mobile': mobile, 'otp': otp},
+    };
+  }
+}
