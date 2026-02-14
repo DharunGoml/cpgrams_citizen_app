@@ -2,6 +2,7 @@ import 'package:cpgrams_citizen_app/layout/landing_layout.dart';
 import 'package:cpgrams_citizen_app/layout/login_layout.dart';
 import 'package:cpgrams_citizen_app/layout/register_layout.dart';
 import 'package:cpgrams_citizen_app/layout/citizen_layout.dart';
+import 'package:cpgrams_citizen_app/screens/grievances/lodge_grievance/lodge_grievance.dart';
 import 'package:cpgrams_citizen_app/screens/grievances/track_grievance/track_grievance.dart';
 import 'package:cpgrams_citizen_app/screens/landing/landing_screen.dart';
 import 'package:cpgrams_citizen_app/screens/login/email_login.dart';
@@ -26,4 +27,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/login/email/password-recovery': (context) =>
       LoginLayout(child: PasswordRecovery()),
   '/grievance/list': (context) => CitizenLayout(child: TrackGrievance()),
+  '/grievance/lodge': (context) => CitizenLayout(child: LodgeGrievance()),
 };

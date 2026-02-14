@@ -1,5 +1,6 @@
 import 'package:cpgrams_citizen_app/models/grievances/grievance_modal.dart';
 import 'package:cpgrams_citizen_app/services/grievances/grievance_service.dart';
+import 'package:cpgrams_citizen_app/utils/double_back_to_close.dart';
 import 'package:cpgrams_citizen_app/utils/secure_storage.dart';
 import 'package:cpgrams_ui_kit/main.dart';
 import 'package:flutter/material.dart';
@@ -66,79 +67,81 @@ class _TrackGrievanceState extends State<TrackGrievance> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          CustomHeader(
-            variant: HeaderVariant.protected,
-            title: "Track Grievance",
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 20,
-                  color: Color(0xFF1E3C72),
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        hintText: "Search",
-                        prefixIcon: Icon(
-                          Icons.search_rounded,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20.0),
-                    CustomIconButton(
-                      icon: Icons.filter_alt_outlined,
-                      onPressed: () {},
-                      iconColor: const Color(0xFFFF7501),
-                      backgroundColor: Colors.white,
-                      borderColor: const Color(0xFFDDDDDD),
-                      size: 42.0,
-                    ),
-                    const SizedBox(width: 12.0),
-                    CustomIconButton(
-                      icon: Icons.add_rounded,
-                      onPressed: () {},
-
-                      size: 42.0,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                ListView.builder(
-                  itemCount: _grievanceTrackList?.length ?? 0,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    final grievance = _grievanceTrackList?[index];
-                    return _card(
-                      grievance?['registrationNo'] ?? "N/A",
-                      grievance?['title'] ?? "N/A",
-                      grievance?['status'] ?? "N/A",
-                      grievance?['entityName'] ?? "N/A",
-                      grievance?['categoryName'] ?? "N/A",
-                      grievance?['createdAt'] ?? "N/A",
-                    );
-                  },
+    return DoubleBackToCloseWidget(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomHeader(
+              variant: HeaderVariant.protected,
+              title: "Track Grievance",
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 20,
+                    color: Color(0xFF1E3C72),
+                  ),
+                  onPressed: () {},
                 ),
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomTextField(
+                          hintText: "Search",
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20.0),
+                      CustomIconButton(
+                        icon: Icons.filter_alt_outlined,
+                        onPressed: () {},
+                        iconColor: const Color(0xFFFF7501),
+                        backgroundColor: Colors.white,
+                        borderColor: const Color(0xFFDDDDDD),
+                        size: 42.0,
+                      ),
+                      const SizedBox(width: 12.0),
+                      CustomIconButton(
+                        icon: Icons.add_rounded,
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/grievance/lodge'),
+                        size: 42.0,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  ListView.builder(
+                    itemCount: _grievanceTrackList?.length ?? 0,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      final grievance = _grievanceTrackList?[index];
+                      return _card(
+                        grievance?['registrationNo'] ?? "N/A",
+                        grievance?['title'] ?? "N/A",
+                        grievance?['status'] ?? "N/A",
+                        grievance?['entityName'] ?? "N/A",
+                        grievance?['categoryName'] ?? "N/A",
+                        grievance?['createdAt'] ?? "N/A",
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

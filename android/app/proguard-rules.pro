@@ -39,3 +39,10 @@
 
 # Flutter Secure Storage
 -keep class com.it_nomads.fluttersecurestorage.** { *; }
+
+# Google Play Core (for Flutter deferred components)
+-keep class com.google.android.play.core.** { *; }
+-dontwarn com.google.android.play.core.**
+-keep class com.google.android.play.core.splitcompat.** { *; }
+-keep class com.google.android.play.core.splitinstall.** { *; }
+-keep class com.google.android.play.core.tasks.** { *; }

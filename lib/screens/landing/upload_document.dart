@@ -88,9 +88,10 @@ class _UploadDocumentState extends State<UploadDocument>
 
       final payload = FormData.fromMap({
         'files': await MultipartFile.fromFile(filePath),
+        'module': 'grievance',
       });
 
-      final response = await GrievanceService().pdfExtract(payload);
+      final response = await GrievanceService().pdfExtract(payload, false);
 
       if (response.success && response.data != null) {
         final extractedText = _extractTextFromResponse(response.data!);
